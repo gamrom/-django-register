@@ -1,12 +1,7 @@
 {% extends "base.html" %} <!-- 상속받는 템플릿 -->
 
 {% block contents %}
-<div class="row mt-5">
-  <div class="col-12">
-    {{error}}
-    <!-- res_data['error'] 의 에러 -->
-  </div>
-</div>
+
 <div class="row mt-5">
   <div class="col-12 text-center">
     <h1>로그인</h1>
@@ -14,16 +9,26 @@
 </div>
 <div class="row mt-5">
   <div class="col-12">
+    {{error}}
+    <!-- res_data['error'] 의 에러 -->
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-12">
     <form method="POST" action="."> <!--점 써도돼고 아예 액션 생략해도됨. 생략하면 현재페이지로 감-->
       {% csrf_token %}
-      <div class="form-group">
-        <label for="username">사용자 이름</label>
-        <input type="text" class="form-control" id="username" placeholder="사용자 이름" name="username">
-      </div>
-      <div class="form-group">
-        <label for="password">비밀번호</label>
-        <input type="password" class="form-control" id="password" placeholder="비밀번호 확인" name="password">
-      </div>
+      <!-- {{form}} -->
+      <!-- {{form.as_p}} -->
+      <!-- {{form.as_table}} -->
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{field.id_for_label}}">{{field.label}}</label>
+          <input type="{{field.field.widget.input_type}}" id="{{field.id_for_label}}" placeholder="{{field.label}}" name="{{field.name}}" class="form-control">
+        </div>
+      {% if field.errors %}
+        <span style="color:red">{{field.errors}}</span>
+      {% endif %}
+      {% endfor %}
       <button type="submit" class="btn btn-primary">로그인</button>
     </form>
   </div>
